@@ -19,6 +19,7 @@ import dotenv
 from dotenv import load_dotenv
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
+weathertoken = os.getenv('WEATHER_TOKEN')
 
 # Server specific prefixes
 def get_prefix(client, message):
