@@ -96,6 +96,7 @@ class Utility(commands.Cog):
     # Weather command
     @commands.command(name="weather")
     async def _weather(self, ctx, city_name):
+        # TODO #2 Fix weather command
         """Get weather information about a location. Usage: ?weather <location>"""
         base_url = "http://api.weatherapi.com/v1/current.json?"
         complete_url = base_url + "key=" + weathertoken + "&q=" + city_name

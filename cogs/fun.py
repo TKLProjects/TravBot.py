@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 import json
 import random
+import requests
 
 # Cog class:
 class Fun(commands.Cog):
@@ -33,6 +34,42 @@ class Fun(commands.Cog):
         fig = Figlet()
         figsend = fig.renderText(figtext)
         await ctx.send(f"```{figsend}```")
+    
+    @commands.command()
+    async def urban(self, ctx, *, word):
+        url = "http://urbanscraper.herokuapp.com/define/"
+        completeurl = url + word
+        try:
+            response = requests.get(completeurl)
+        except:
+            ctx.send("Couldn't find that word.")
+
+        res = response.json()
+        term = res["term"]
+        defi = res["definition"]
+        example = res["example"]
+        word_url = res["url"]
+        posttime = res["posted"]
+        author = res["author"]
+        
+        urbanembed = discord.Embed(title=term,url=word_url)
+        urbanembed.add_field(name="**Definition:**",value=defi)
+        urbanembed.add_field(name="**Example:**",value=example)
+        urbanembed.set_footer(text="Author: " + author)
+        await ctx.send(embed=urbanembed)
+
+
+
+    @commands.command()
+    async def emote(self, ctx, emote):
+        emoji = discord.Emoji()
+        emoteurl = emoji.url
+        await ctx.send(emoteurl)
+
+    @commands.command(hidden=True)
+    async def tts(self, ctx, *, message):
+        await ctx.send(content=message, tts=True)
+        
 
 # This always needs to be at the end of a cog file:
 def setup(client):
