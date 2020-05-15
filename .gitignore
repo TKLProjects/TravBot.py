@@ -131,3 +131,5 @@ dmypy.json
 todo.txt
 .vscode/launch.json
 storage/prefixes.json
+storage/weathertoken.txt
+.vscode/settings.json

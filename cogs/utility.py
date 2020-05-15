@@ -4,10 +4,7 @@ import discord
 from discord.ext import commands
 import math
 import requests
-import dotenv
-from dotenv import load_dotenv
-load_dotenv()
-weathertoken = os.getenv('WEATHER_TOKEN')
+import dotenv 
 
 # Cog class:
 class Utility(commands.Cog):
@@ -96,10 +93,11 @@ class Utility(commands.Cog):
     # Weather command
     @commands.command(name="weather")
     async def _weather(self, ctx, city_name):
-        # TODO #2 Fix weather command
         """Get weather information about a location. Usage: ?weather <location>"""
+        with open("storage/weathertoken.txt") as tokenweather:
+            weathertoken = tokenweather.readlines(1)
         base_url = "http://api.weatherapi.com/v1/current.json?"
-        complete_url = base_url + "key=" + weathertoken + "&q=" + city_name
+        complete_url = base_url + "key=f44ceda5450e4c16be585450200805" + "&q=" + str(city_name)
         try:
             response = requests.get(complete_url)
         except BaseException:
@@ -112,15 +110,15 @@ class Utility(commands.Cog):
         current_temperature = str(int(weather["temp_c"])) + "°C"
         current_pressure = str(weather["pressure_mb"])[-3:] + "mBar"
         current_humidity = str(weather["humidity"]) + "%"
-        image = "https:" + condition["icon"]
-        weather_timezone = location["localtime"]
-        weather_location = location["name"]
-        weather_description = "Description: " + condition["text"]
+        image = "https:" + str(condition["icon"])
+        weather_timezone = str(location["localtime"])
+        weather_location = str(location["name"])
+        weather_description = "Description: " + str(condition["text"])
         weather_wind_kph = str(weather["wind_kph"])
         weather_wind_dir = str(weather["wind_dir"])
 
         weatherembed = discord.Embed(title="Weather for " + weather_location,color=0x7ac5c9)
-        weatherembed.set_author(name=f"{client.user.name}",icon_url=client.user.avatar_url)
+        weatherembed.set_author(name=f"{self.client.user.name}",icon_url=self.client.user.avatar_url)
         weatherembed.set_footer(text="https://weatherapi.com")
         weatherembed.add_field(name="Temperature:", value=current_temperature)
         weatherembed.add_field(name="Pressure:", value=current_pressure)
