@@ -93,7 +93,6 @@ class Utility(commands.Cog):
     # Weather command
     @commands.command(name="weather")
     async def _weather(self, ctx, city_name):
-        # TODO #2 Fix weather command
         """Get weather information about a location. Usage: ?weather <location>"""
         with open("storage/weathertoken.txt") as tokenweather:
             weathertoken = tokenweather.readlines(1)
