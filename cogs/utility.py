@@ -21,6 +21,7 @@ class Utility(commands.Cog):
 #   This is a command:
     @commands.command()
     async def shorten(self, ctx, url):
+        """Shortens a URL. Usage: ?shorten <url>"""
         import gdshortener
         s = gdshortener.ISGDShortener()
         await ctx.send(s.shorten(f'{url}'))
@@ -81,11 +82,13 @@ class Utility(commands.Cog):
     # Code command
     @commands.command()
     async def code(self, ctx):
+        """Sends bot repo link."""
         await ctx.send("https://github.com/TKLprojects/travbot.py")     
 
     # Desc command
     @commands.command()
     async def desc(self, ctx, *, cname):
+        """Changes voice channel name. Usage: ?desc <name>"""
         channel = ctx.author.voice.channel
         await channel.edit(name=cname)
         await ctx.send(f'Changed channel name to "{cname}"')
@@ -97,12 +100,13 @@ class Utility(commands.Cog):
         with open("storage/weathertoken.txt") as tokenweather:
             weathertoken = tokenweather.readlines(1)
         base_url = "http://api.weatherapi.com/v1/current.json?"
-        complete_url = base_url + "key=f44ceda5450e4c16be585450200805" + "&q=" + str(city_name)
+        complete_url = base_url + "key=" + str(weathertoken) + "&q=" + str(city_name)
         try:
             response = requests.get(complete_url)
         except BaseException:
             await ctx.send("no")
         res = response.json()
+        # TODO #5 Fix KeyError (can't read token)
         weather = res["current"]
         location = res["location"]
         condition = weather["condition"]
@@ -127,6 +131,12 @@ class Utility(commands.Cog):
         weatherembed.add_field(name="Time:", value=weather_timezone)
         weatherembed.set_thumbnail(url=image)
         await ctx.send(embed=weatherembed)
+    @commands.command()
+    async def reboot(self, ctx):
+        """Reboots the bot, if you run via pm2."""
+        await ctx.send("Rebooting...")
+        exit()
+
 
 # This always needs to be at the end of a cog file:
 def setup(client):
