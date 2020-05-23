@@ -4,7 +4,8 @@ import discord
 from discord.ext import commands
 import math
 import requests
-import dotenv 
+import dotenv
+import json
 
 # Cog class:
 class Utility(commands.Cog):
@@ -97,8 +98,9 @@ class Utility(commands.Cog):
     @commands.command(name="weather")
     async def _weather(self, ctx, city_name):
         """Get weather information about a location. Usage: ?weather <location>"""
-        with open("storage/weathertoken.txt") as tokenweather:
-            weathertoken = tokenweather.readlines(1)
+        with open("storage/tokens.json") as tokensfile:
+            tokenfile = json.load(tokensfile)
+            weathertoken = tokenfile['weather']
         base_url = "http://api.weatherapi.com/v1/current.json?"
         complete_url = base_url + "key=" + str(weathertoken) + "&q=" + str(city_name)
         try:
@@ -140,4 +142,4 @@ class Utility(commands.Cog):
 
 # This always needs to be at the end of a cog file:
 def setup(client):
-    client.add_cog(Utility(client))
+    client.add_cog(Utility(client)) # ga naar weather

@@ -14,13 +14,6 @@ handler = logging.FileHandler(filename='./storage/discord.log', encoding='utf-8'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
-# Dotenv
-import dotenv
-from dotenv import load_dotenv
-load_dotenv()
-token = os.getenv('DISCORD_TOKEN')
-weathertoken = os.getenv('WEATHER_TOKEN')
-
 # Server specific prefixes
 def get_prefix(client, message):
     with open('./storage/prefixes.json', 'r') as f:
@@ -82,5 +75,8 @@ async def cprefix(ctx, prefix):
         json.dump(prefixes, f, indent=4)
 
     await ctx.send(f'Prefix changed to: {prefix}')
+with open("storage/tokens.json") as tokensfile:
+    tokenfile = json.load(tokensfile)
+    token = tokenfile['bot']
 
 client.run(token)
