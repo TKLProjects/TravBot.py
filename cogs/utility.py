@@ -6,6 +6,7 @@ import math
 import requests
 import dotenv
 import json
+import datetime
 
 # Cog class:
 class Utility(commands.Cog):
@@ -133,13 +134,56 @@ class Utility(commands.Cog):
         weatherembed.add_field(name="Time:", value=weather_timezone)
         weatherembed.set_thumbnail(url=image)
         await ctx.send(embed=weatherembed)
+    
     @commands.command()
     async def reboot(self, ctx):
         """Reboots the bot, if you run via pm2."""
         await ctx.send("Rebooting...")
         exit()
 
+    # Userinfo command
+    @commands.command()
+    async def userinfo(self, ctx):
+        """Displays info about author."""
+        currentDate = datetime.datetime.now()
+        avi_url = ctx.author.avatar_url
+        infoembed = discord.Embed()
+        infoembed.set_author(name=ctx.author.name + "#" + ctx.author.discriminator,icon_url=avi_url)
+        infoembed.add_field(name="Status", value=ctx.author.status)
+        infoembed.add_field(name="Joined at", value=str(ctx.author.joined_at.day) + "-" + str(ctx.author.joined_at.month) + "-" + str(ctx.author.joined_at.year) + " " + str(ctx.author.joined_at.hour) + ":" + str(ctx.author.joined_at.minute))
+        infoembed.add_field(name="Registered at", value=str(ctx.author.created_at.day) + "-" + str(ctx.author.created_at.month) + "-" + str(ctx.author.created_at.year) + " " + str(ctx.author.created_at.hour) + ":" + str(ctx.author.created_at.minute))
+        infoembed.add_field(name="Nickname", value=ctx.author.display_name)
+        infoembed.set_footer(text=str(currentDate.day) + "-" + str(currentDate.month) + "-" + str(currentDate.year) + " " + str(currentDate.hour) + ":" + str(currentDate.minute) + ":" + str(currentDate.second))
+        infoembed.set_thumbnail(url=avi_url)
+        await ctx.send(embed=infoembed)
+    
+    # Serverinfo command
+    @commands.command()
+    async def serverinfo(self, ctx):
+        """Displays info about the current guild."""
+        serverembed = discord.Embed(title="Server info")
+        serverembed.add_field(name="Server Name",value=ctx.guild.name)
+        serverembed.add_field(name="Owner",value=ctx.guild.owner)
+        serverembed.add_field(name="Members",value=len(ctx.guild.members))
+        serverembed.add_field(name="Channels",value=len(ctx.guild.text_channels + ctx.guild.voice_channels))
+        serverembed.add_field(name="Text Channels",value=len(ctx.guild.text_channels))
+        serverembed.add_field(name="Voice Channels",value=len(ctx.guild.voice_channels))
+        serverembed.set_thumbnail(url=ctx.guild.icon_url)
+        await ctx.send(embed=serverembed)
+
+    # Poll command
+    # @commands.command()
+    # async def poll(self, ctx, question, *options: str):
+    #     """Display a poll"""
+    #     import time
+    #     pollembed = discord.Embed(description=question)
+    #     pollembed.set_author(name=f"Poll created by {ctx.message.author}",icon_url=ctx.guild.icon_url)
+    #     pollembed.set_footer(text="React to vote.")
+    #     reactions = ['✅', '❌']
+    #     reactmessage = await ctx.send(embed=pollembed)
+    #     for reaction in reactions:
+    #         await ctx.message.add_reaction(reaction)
 
 # This always needs to be at the end of a cog file:
 def setup(client):
-    client.add_cog(Utility(client)) # ga naar weather
+    client.add_cog(Utility(client))

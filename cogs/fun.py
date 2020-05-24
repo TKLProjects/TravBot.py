@@ -15,9 +15,15 @@ class Fun(commands.Cog):
 #   This is an event:
     # @commands.Cog.listener()
     # async def on_ready(self):
-    #     print('This will be printed to the console.')
 
-#   This is a command:
+    @commands.command()
+    async def react(self, ctx, emote):
+        if isinstance(emote, int):
+            emotename = client.get_emoji(emote)
+        if isinstance(emote, str):
+            emotename = discord.utils.get(self.client.emojis, name=emote)
+        await ctx.message.add_reaction(emotename)
+
     @commands.command(name="8ball")
     async def _8ball(self, ctx):
         import random
@@ -61,10 +67,12 @@ class Fun(commands.Cog):
 
 
     @commands.command()
-    async def emote(self, ctx, emote):
-        emoji = discord.Emoji()
-        emoteurl = emoji.url
-        await ctx.send(emoteurl)
+    async def emote(self, ctx, search_term):
+        if isinstance(search_term, int):
+            emotename = client.get_emoji(search_term)
+        if isinstance(search_term, str):
+            emotename = discord.utils.get(self.client.emojis, name=search_term)
+        await ctx.send(emotename)
 
     @commands.command(hidden=True)
     async def tts(self, ctx, *, message):
